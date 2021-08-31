@@ -22,7 +22,11 @@ jobs:
 
     steps:
       - uses: msys2/setup-msys2@v2
-        install: mingw-w64-x86_64-toolchain
+        with:
+          install: mingw-w64-x86_64-toolchain
+      
+        if: matrix.os == 'windows-latest'
+        
       # Make sure we have all submodules
       - uses: actions/checkout@v2
         with:
