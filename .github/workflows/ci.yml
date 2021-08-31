@@ -50,8 +50,9 @@ jobs:
 
       # If current OS is Windows
       - name: Build bgfx (Windows)
-        env:
-          MINGW: C:\Program Files (x86)\GnuWin32\bin
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
         run: |
           make build vs2017-debug64
         if: matrix.os == 'windows-latest'
