@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  job:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+          - os: ubuntu-latest
+
+    steps:
+      # Make sure we have all submodules
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive 
+
+      # Libraries to compile bgfx
+      - name: Clone bgfx dependencies
+        run: |
+          git clone --depth 1 https://github.com/bkaradzic/bx ../bx
+          git clone --depth 1 https://github.com/bkaradzic/bimg ../bimg
+
+      # If current OS is Linux
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install -y libgl1-mesa-dev x11proto-core-dev libx11-dev gcc-8 g++-8
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Build bgfx (Linux)
+        run: |
+          make build CXX="g++-8" CC="gcc-8"
+        if: matrix.os == 'ubuntu-latest'
