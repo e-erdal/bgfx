@@ -1,4 +1,4 @@
-name: Release
+name: Build bgfx
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
         include:
           - os: windows-latest
           - os: ubuntu-latest
+          - os: macOS-latest
 
     steps:
       # Make sure we have all submodules
@@ -40,3 +41,15 @@ jobs:
         run: |
           make build CXX="g++-8" CC="gcc-8"
         if: matrix.os == 'ubuntu-latest'
+
+      # If current OS is macOS
+      - name: Build bgfx (macOS)
+        run: |
+          make build osx-x64-debug
+        if: matrix.os == 'macOS-latest'
+
+      # If current OS is Windows
+      - name: Build bgfx (Windows)
+        run: |
+          make build
+        if: matrix.os == 'windows-latest'
