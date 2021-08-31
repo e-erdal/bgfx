@@ -49,13 +49,7 @@ jobs:
         if: matrix.os == 'macOS-latest'
 
       # If current OS is Windows
-      - name: Install mingw-gcc (Windows)
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
-        if: matrix.os == 'windows-latest'
-
       - name: Build bgfx (Windows)
         run: |
-          make build vs2017-debug64
+          make vs2017-debug64 build
         if: matrix.os == 'windows-latest'
